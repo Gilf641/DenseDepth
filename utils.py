@@ -30,6 +30,7 @@ def load_images(image_files):
     img_shape = (448,448) # set it to 448x448 to maintain the original resolution
 
     for i, file in enumerate(image_files):
+        print("Image shape",i.shape)
         loaded_images[i,...] = np.clip((resize(file, img_shape, preserve_range=True, mode="reflect", anti_aliasing=True))/ 255, 0, 1) #  this is clipping out the pixel value b/w 0 & 1
     return loaded_images
 

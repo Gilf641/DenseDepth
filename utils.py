@@ -22,7 +22,6 @@ def scale_up(scale, images):
         img = images[i]
         output_shape = (scale * img.shape[0], scale * img.shape[1])
         scaled.append( resize(img, output_shape, order=1, preserve_range=True, mode='reflect', anti_aliasing=True ) )
-
     return np.stack(scaled)
 
 def load_images(image_files):
@@ -30,8 +29,8 @@ def load_images(image_files):
     img_shape = (448,448) # set it to 448x448 to maintain the original resolution
 
     for i, file in enumerate(image_files):
-        print("Image shape",i.shape)
-        loaded_images[i,...] = np.clip((resize(file, img_shape, preserve_range=True, mode="reflect", anti_aliasing=True))/ 255, 0, 1) #  this is clipping out the pixel value b/w 0 & 1
+        # print("Image array", file)
+        loaded_images[i,...] = resize(file, (1,448,448,3))# resize the image to 448x448
     return loaded_images
 
 
@@ -146,3 +145,17 @@ def evaluate(model, rgb, depth, crop, batch_size=6, verbose=False):
         print("{:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}".format(e[0],e[1],e[2],e[3],e[4],e[5]))
 
     return e
+
+def convimage_to_array(imagepath):
+      """
+  Func: Converts Image to Array
+  """
+  images = []
+  for i in os.listdir(imagepath):
+    img = Image.open(os.path.join(path,i))
+    if i==0:
+      image = np.expand_dims(np.array(img, dtype=float)/255, axis=0)
+    else:
+      image = np.expand_dims(np.array(img, dtype=float)/255, axis=0)
+      images.append(image)
+  return images

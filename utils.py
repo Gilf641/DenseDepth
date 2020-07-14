@@ -1,10 +1,11 @@
 import numpy as np
 from PIL import Image
+from skimage.transform import resize
 
 def DepthNorm(x, maxDepth):
     return maxDepth / x
 
-def predict(model, images, minDepth=10, maxDepth=1000, batch_size=2):
+def predict_(model, images, minDepth=10, maxDepth=1000, batch_size=2):
     # Support multiple RGBs, one RGB image, even grayscale 
     if len(images.shape) < 3: images = np.stack((images,images,images), axis=2)
     if len(images.shape) < 4: images = images.reshape((1, images.shape[0], images.shape[1], images.shape[2]))
@@ -13,8 +14,8 @@ def predict(model, images, minDepth=10, maxDepth=1000, batch_size=2):
     # Put in expected range
     return np.clip(DepthNorm(predictions, maxDepth=maxDepth), minDepth, maxDepth) / maxDepth
 
+
 def scale_up(scale, images):
-    from skimage.transform import resize
     scaled = []
     
     for i in range(len(images)):
@@ -25,11 +26,14 @@ def scale_up(scale, images):
     return np.stack(scaled)
 
 def load_images(image_files):
-    loaded_images = []
-    for file in image_files:
-        x = np.clip(np.asarray(Image.open( file ), dtype=float) / 255, 0, 1)
-        loaded_images.append(x)
-    return np.stack(loaded_images, axis=0)
+    loaded_images = np.empty([len(image_files), 448, 448, 3], dtype=np.float16) # create an empty numpy array
+    img_shape = (448,448) # set it to 448x448 to maintain the original resolution
+
+    for i, file in enumerate(image_files):
+        loaded_images[i,...] = np.clip(resize(file, img_shape, preserve_range=True, mode="reflect",
+                                            anti_aliasing=True)/ 255, 0, 1) #  this is clipping out the pixel value b/w 0 & 1
+    return loaded_images
+
 
 def to_multichannel(i):
     if i.shape[2] == 3: return i

@@ -23,10 +23,10 @@ custom_objects = {'BilinearUpSampling2D': BilinearUpSampling2D, 'depth_loss_func
 
 print('Loading model...')
 
-# Load model into GPU / CPU
-# model = load_model(args.model, custom_objects=custom_objects, compile=False)
+Load model into GPU / CPU
+model = load_model(args.model, custom_objects=custom_objects, compile=False)
 
-# print('\nModel loaded ({0}).'.format(args.model))
+print('\nModel loaded ({0}).'.format(args.model))
 
 
 def depth_images(image_files, batch_size):

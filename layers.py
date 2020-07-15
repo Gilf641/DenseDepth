@@ -40,7 +40,6 @@ class BilinearUpSampling2D(Layer):
     def get_config(self):
         config = {'size': self.size, 'data_format': self.data_format}
         base_config = super(BilinearUpSampling2D, self).get_config()
-        return dict(list(b
-ase_config.items()) + list(config.items()))
+        return dict(list(base_config.items()) + list(config.items()))
 
  

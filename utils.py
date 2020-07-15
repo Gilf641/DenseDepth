@@ -147,7 +147,7 @@ def evaluate(model, rgb, depth, crop, batch_size=6, verbose=False):
     return e
 
 def convimage_to_array(imagepath):
-      """
+  """
   Func: Converts Image to Array
   """
   images = []

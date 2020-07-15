@@ -43,10 +43,4 @@ class BilinearUpSampling2D(Layer):
         return dict(list(b
 ase_config.items()) + list(config.items()))
 
-    © 2020 GitHub, Inc.
-    Terms
-    Privacy
-    Security
-    Status
-    Help
-
+ 
